@@ -1,0 +1,149 @@
+.footer__copyright {
+	max-width: 180px;
+	color: #1a1a1a;
+	font-size: 9px;
+	line-height: 12px;
+}
+
+.footer {
+	width: 100%;
+	padding-top: 40px;
+	padding-bottom: 88px;
+	background-color: #ffe44d;
+}
+
+.footer__wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.footer__col {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.menu-bottom {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.menu-bottom__item {
+	color: #1a1a1a;
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+	transition: 0.2s ease-in-out;
+}
+
+.menu-bottom__item:hover {
+	color: #7b8e98;
+}
+
+.menu:hover {
+	text-decoration: underline;
+}
+
+.contacts {
+	display: flex;
+	flex-direction: column;
+}
+
+.contacts__title {
+	margin-top: 0;
+	margin-bottom: 12px;
+	color: #1a1a1a;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.contacts__link {
+	color: currentcolor;
+	text-decoration: none;
+	transition: 0.2s ease-in-out;
+}
+
+.contacts__link:hover {
+	color: #f44336;
+}
+
+.contacts__tel {
+	margin-bottom: 4px;
+	font-weight: 800;
+	font-size: 20px;
+	line-height: 24px;
+}
+
+.contacts__mail {
+	margin-bottom: 12px;
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.socials {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.socials__link {
+	display: flex;
+	opacity: 0.4;
+	transition: opacity 0.3s;
+}
+
+.socials__link:hover {
+	opacity: 1;
+}
+
+@media (width <= 880px) {
+	.wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		row-gap: 40px;
+	}
+
+	.col:last-child {
+		grid-row-start: 1;
+		grid-column-start: 2;
+	}
+}
+
+@media (width <= 450px) {
+	.wrapper {
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	.col:last-child {
+		grid-row-start: 1;
+		grid-column-start: 1;
+	}
+}
+
+@media (width <= 768px) {
+	.footer__logo {
+		display: none;
+	}
+
+	.footer__copyright {
+		display: none;
+	}
+
+	.menu-bottom {
+		display: none;
+	}
+
+	.footer__wrapper {
+		justify-content: center;
+		text-align: center;
+	}
+}
