@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Button } from '../../../shared/ui/Button';
 import s from './NotFoudPage.module.css';
 
 export const NotFoundPage = () => {
@@ -6,7 +7,7 @@ export const NotFoundPage = () => {
 		<div className={s.NotFoundPage}>
 			<h1>Страница на найдена</h1>
 			<Link to='/'>
-				<button>Перейти на главную</button>
+				<Button>Перейти на главную</Button>
 			</Link>
 		</div>
 	);

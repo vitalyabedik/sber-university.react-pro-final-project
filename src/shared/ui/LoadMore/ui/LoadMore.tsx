@@ -1,20 +1,29 @@
-import { Alert, CircularProgress, Stack } from '@mui/material';
-import { useRef } from 'react';
-import { useLoadMore } from '../hooks/useLoadMore';
+import { Alert, Stack } from '@mui/material';
+import { Ref } from 'react';
+import { Spinner } from '../../Spinner';
 
-export const LoadMore = () => {
-	const ref = useRef<HTMLDivElement>(null);
-	const { isEndOfList, isFetching } = useLoadMore({ ref });
+type LoadMoreProps = {
+	isFetching: boolean;
+	isEndOfList: boolean;
+	endMessage?: string;
+	innerRef?: Ref<HTMLDivElement>;
+};
 
+export const LoadMore = ({
+	isFetching,
+	isEndOfList,
+	endMessage = 'End of list!',
+	innerRef,
+}: LoadMoreProps) => {
 	return (
 		<Stack
-			ref={ref}
+			ref={innerRef}
 			direction='row'
 			justifyContent='center'
 			alignItems='center'
 			sx={{ my: 5 }}>
-			{isFetching && <CircularProgress />}
-			{isEndOfList && <Alert severity='success'>End of list!</Alert>}
+			{isFetching && <Spinner />}
+			{isEndOfList && <Alert severity='success'>{endMessage}</Alert>}
 		</Stack>
 	);
 };

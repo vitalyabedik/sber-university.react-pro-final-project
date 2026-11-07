@@ -1,0 +1,30 @@
+.input {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	box-sizing: border-box;
+	width: 100%;
+	height: 48px;
+	margin: 8px 0;
+	padding: 7px 16px;
+	font-family: 'Arial', 'Helvetica', sans-serif;
+	font-size: 16px;
+	background: #ffffff;
+	border: 1px solid #cfd8dc;
+	border-radius: 12px;
+}
+
+.input:focus {
+	border-color: #ffe44d;
+	outline: none;
+}
+
+.input_type_textarea {
+	height: auto;
+	min-height: 100px;
+	resize: none;
+}
+
+.label {
+	flex: 1 1;
+}

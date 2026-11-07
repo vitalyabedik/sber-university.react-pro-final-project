@@ -1,4 +1,4 @@
-import { Card } from '../../../shared/ui/Card';
+import { ProductCard } from '../../../features/products';
 import s from './CardList.module.css';
 
 type CardListProps = {
@@ -17,7 +17,7 @@ export const CardList = ({ title, products }: CardListProps) => {
 			</div>
 			<div className={s['card-list__items']}>
 				{products.map((product) => (
-					<Card key={product.id} product={product} />
+					<ProductCard key={product.id} product={product} />
 				))}
 			</div>
 		</div>

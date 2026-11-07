@@ -1,0 +1,25 @@
+.card__cart {
+	margin-top: auto;
+}
+
+.card__btn {
+	display: inline-block;
+	padding: 10px 18px;
+	color: currentcolor;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+	text-decoration: none;
+	border-radius: 55px;
+	transition: background-color 0.3s;
+	border: none;
+}
+
+.card__btn_type_primary {
+	background-color: #ffe44d;
+}
+
+.card__btn_type_primary:hover {
+	color: #f44336;
+	background-color: #ffaa0d;
+}

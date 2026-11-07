@@ -5,21 +5,18 @@ import truckSVG from '../../../shared/assets/icons/truck.svg';
 import qualitySVG from '../../../shared/assets/icons/quality.svg';
 import { Rating } from '../../../shared/ui/Rating';
 import { ButtonBack } from '../../../shared/ui/ButtonBack';
-import { LikeButton } from '../../../shared/ui/LikeButton';
-import { ReviewList } from '../../../widgets/ReviewList/ui/ReviewList';
 import { WithProtection } from '../../../shared/store/HOCs/WithProtection';
 import { useGetProductQuery } from '../../../shared/store/api/productsApi';
-import { ProductCartCounter } from '../../../shared/ui/ProductCartCounter/ui/ProductCartCounter';
+import { ProductCartCounter } from '../../../widgets/ProductCartCounter/ui/ProductCartCounter';
 import { useAppSelector } from '../../../shared/store/utils';
-import { cartSelectors } from '../../../shared/store/slices/cart';
-import { CartCounter } from '../../../shared/ui/CartCounter';
+import { selectIsProductInCart } from '../../../entities/cart';
+import { CartProductCounter } from '../../../features/cart';
+import { ProductLikeButton, ProductReview } from '../../../features/products';
 
 export const ProductPage = WithProtection(() => {
 	const location = useLocation();
 	const { pathname } = location;
 	const productId = pathname.split('/').at(-1) || '';
-
-	const cartProducts = useAppSelector(cartSelectors.getCartProducts);
 
 	const { data: product } = useGetProductQuery({ id: productId });
 
@@ -29,7 +26,7 @@ export const ProductPage = WithProtection(() => {
 
 	const { id, name, images, description, price, discount } = product;
 
-	const isProductInCart = !!cartProducts.find((p) => p.id === id);
+	const isProductInCart = useAppSelector(selectIsProductInCart(id));
 
 	return (
 		<>
@@ -54,12 +51,12 @@ export const ProductPage = WithProtection(() => {
 					</div>
 
 					{isProductInCart ? (
-						<CartCounter productId={id} />
+						<CartProductCounter productId={id} />
 					) : (
 						<ProductCartCounter product={product} />
 					)}
 
-					<LikeButton product={product} />
+					<ProductLikeButton product={product} />
 					<div className={classNames(s['product__delivery'])}>
 						<img src={truckSVG} alt='truck' />
 						<div className={classNames(s['product__right'])}>
@@ -125,7 +122,7 @@ export const ProductPage = WithProtection(() => {
 					</div>
 				</div>
 			</div>
-			<ReviewList product={product} />
+			<ProductReview product={product} />
 		</>
 	);
 });

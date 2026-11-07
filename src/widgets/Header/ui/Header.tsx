@@ -1,12 +1,11 @@
 import classNames from 'classnames';
 import s from './Header.module.css';
 import { Logo } from '../../../shared/ui/Logo';
-import { Search } from '../../../shared/ui/Search/ui/Search';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../shared/store/utils';
 import { userSelectors } from '../../../shared/store/slices/user';
-import { isLiked } from '../../../shared/utils';
-import { useProducts } from '../../../shared/store/hooks/useProducts';
+import { isLiked } from '../../../entities/product';
+import { useProducts, ProductSearch } from '../../../features/products';
 import { cartSelectors } from '../../../shared/store/slices/cart';
 
 export const Header = () => {
@@ -24,7 +23,7 @@ export const Header = () => {
 		<header className={s.header}>
 			<div className={classNames('container', s.header__wrapper)}>
 				<Logo />
-				<Search />
+				<ProductSearch />
 				<div className={s['header__icons-menu']}>
 					<Link className={s['header__favorites-link']} to='/favorites'>
 						<svg

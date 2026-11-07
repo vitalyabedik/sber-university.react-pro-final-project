@@ -1,11 +1,19 @@
 import s from './Search.module.css';
-import { useProductsSearchForm } from '../hooks/usePostsSearchForm';
+import { ChangeEvent } from 'react';
 
-export const Search = () => {
-	const { searchValue, setSearchValue } = useProductsSearchForm();
+type SearchProps = {
+	value: string;
+	onChange: (value: string) => void;
+	placeholder?: string;
+};
 
-	const handleClearSearchText = () => {
-		setSearchValue('');
+export const Search = ({
+	value,
+	onChange,
+	placeholder = 'Поиск',
+}: SearchProps) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		onChange(e.target.value);
 	};
 
 	return (
@@ -13,12 +21,12 @@ export const Search = () => {
 			<input
 				type='text'
 				className={s['search__input']}
-				placeholder='Поиск'
-				value={searchValue}
-				onChange={(e) => setSearchValue(e.target.value)}
+				placeholder={placeholder}
+				value={value}
+				onChange={handleChange}
 			/>
-			{searchValue.length > 0 && (
-				<button className={s['search__btn']} onClick={handleClearSearchText}>
+			{value.length > 0 && (
+				<button className={s['search__btn']} onClick={() => onChange('')}>
 					<svg
 						width='24'
 						height='24'
