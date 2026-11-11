@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
@@ -27,6 +27,12 @@ export const SignUpForm: FC = () => {
 	// Из хука useSignUpMutation (был получен путем автогенерации)
 	// достаем функцию, которая будет (регистрировать пользователя) делать POST-запрос к нашем серверу)
 	const [signUpRequestFn] = useSignUpMutation();
+	// ref на поле email — для автофокуса при монтировании формы
+	const emailInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		emailInputRef.current?.focus();
+	}, []);
 	// инициализируем react-hook-form
 	const {
 		// control понадобиться, чтобы подружить react-hook-form и компоненты из MUI
@@ -101,6 +107,7 @@ export const SignUpForm: FC = () => {
 						control={control}
 						render={({ field }) => (
 							<TextField
+								inputRef={emailInputRef}
 								margin='normal'
 								label='Email Address'
 								type='email'

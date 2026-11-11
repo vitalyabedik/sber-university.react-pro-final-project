@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import {
 	Avatar,
 	Box,
@@ -29,6 +29,15 @@ export const SignInForm: FC = () => {
 	// Из хука useSignUpMutation (был получен путем автогенерации)
 	// достаем функцию, которая будет (регистрировать пользователя) делать POST-запрос к нашем серверу)
 	const [signInRequestFn] = useSignInMutation();
+	// счётчик неудачных попыток входа: значение живёт между рендерами,
+	// но в разметке не участвует — поэтому ref, а не state
+	const failedAttemptsRef = useRef(0);
+	// ref на поле email — для автофокуса при монтировании формы
+	const emailInputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		emailInputRef.current?.focus();
+	}, []);
 	// инициализируем react-hook-form
 	const {
 		// control понадобиться, чтобы подружить react-hook-form и компоненты из MUI
@@ -53,6 +62,8 @@ export const SignInForm: FC = () => {
 			// с помощью конструкции try...catch. В этом случае нам так удобней
 			const response = await signInRequestFn(values).unwrap();
 
+			failedAttemptsRef.current = 0;
+
 			dispatch(userActions.setUser(response.user));
 			dispatch(
 				userActions.setAccessToken({ accessToken: response.accessToken })
@@ -69,6 +80,7 @@ export const SignInForm: FC = () => {
 
 			navigate('/');
 		} catch (error) {
+			failedAttemptsRef.current += 1;
 			// Если произошла ошибка, то выводим уведомление
 			toast.error(
 				getMessageFromError(
@@ -78,6 +90,8 @@ export const SignInForm: FC = () => {
 			);
 		}
 	};
+
+	console.log('failedAttemptsRef', failedAttemptsRef);
 
 	return (
 		<Container component='main' maxWidth='xs'>
@@ -107,6 +121,7 @@ export const SignInForm: FC = () => {
 						control={control}
 						render={({ field }) => (
 							<TextField
+								inputRef={emailInputRef}
 								margin='normal'
 								label='Email Address'
 								type='email'
