@@ -1,11 +1,12 @@
+import { useMemo } from 'react';
 import classNames from 'classnames';
 import s from './Header.module.css';
 import { Logo } from '../../../shared/ui/Logo';
+import { ProductSearch, useProducts } from '../../../features/products';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../shared/store/utils';
 import { userSelectors } from '../../../shared/store/slices/user';
 import { isLiked } from '../../../entities/product';
-import { useProducts, ProductSearch } from '../../../features/products';
 import { cartSelectors } from '../../../shared/store/slices/cart';
 
 export const Header = () => {
@@ -13,9 +14,10 @@ export const Header = () => {
 	const user = useAppSelector(userSelectors.getUser);
 	const cartProducts = useAppSelector(cartSelectors.getCartProducts);
 
-	const likeCount = products.filter((product) =>
-		isLiked(product.likes, user?.id)
-	).length;
+	const likeCount = useMemo(
+		() => products.filter((product) => isLiked(product.likes, user?.id)).length,
+		[products, user?.id]
+	);
 
 	const accessToken = useAppSelector(userSelectors.getAccessToken);
 

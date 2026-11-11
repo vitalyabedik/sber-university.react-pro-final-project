@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { CartItem } from './CartItem/CartItem';
 import { cartActions } from '../../../shared/store/slices/cart';
 import { useAppDispatch } from '../../../shared/store/utils';
@@ -8,7 +8,7 @@ type CartProductItemProps = {
 	product: CartProduct;
 };
 
-export const CartProductItem = ({ product }: CartProductItemProps) => {
+export const CartProductItem = memo(({ product }: CartProductItemProps) => {
 	const dispatch = useAppDispatch();
 	const { id, name, images, price, discount } = product;
 
@@ -27,4 +27,6 @@ export const CartProductItem = ({ product }: CartProductItemProps) => {
 			<CartProductCounter productId={id} />
 		</CartItem>
 	);
-};
+});
+
+CartProductItem.displayName = 'CartProductItem';

@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { useAddToCart } from '../../../shared/hooks/useAddToCart';
 import { Button } from '../../../shared/ui/Button';
 
@@ -6,15 +7,21 @@ type AddToCartButtonProps = {
 	className?: string;
 };
 
-export const AddToCartButton = ({
-	product,
-	className,
-}: AddToCartButtonProps) => {
-	const { addProductToCart } = useAddToCart();
+export const AddToCartButton = memo(
+	({ product, className }: AddToCartButtonProps) => {
+		const { addProductToCart } = useAddToCart();
 
-	return (
-		<Button onClick={() => addProductToCart(product)} className={className}>
-			В корзину
-		</Button>
-	);
-};
+		const handleAdd = useCallback(
+			() => addProductToCart(product),
+			[addProductToCart, product]
+		);
+
+		return (
+			<Button onClick={handleAdd} className={className}>
+				В корзину
+			</Button>
+		);
+	}
+);
+
+AddToCartButton.displayName = 'AddToCartButton';
