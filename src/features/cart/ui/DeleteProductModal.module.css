@@ -1,0 +1,12 @@
+.delete-product__text {
+	margin: 0;
+	color: #1a1a1a;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.delete-product__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
