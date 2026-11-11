@@ -161,3 +161,66 @@ src/
       попыток входа в `SignInForm` (1 балл)
 - [x] `useRef` для автофокуса / работы с DOM — фокус на email при монтировании в `SignInForm`
       и `SignUpForm` (1 балл)
+
+## 5. Альтернативная сборка (esbuild + SWC)
+
+Помимо webpack добавлена вторая production-сборка: бандлер `esbuild`, транспиляция TS/TSX через
+`@swc/core`. Конфиг — `esbuild.config.js` в корне, результат — `build-esbuild/`.
+
+Что умеет так же, как webpack-конфиг:
+
+| Возможность                         | webpack                              | esbuild-конфиг                                                  |
+| ----------------------------------- | ------------------------------------ | --------------------------------------------------------------- |
+| TS/TSX                              | `ts-loader`                          | плагин `swc-transform` на `@swc/core` (jsx runtime automatic)   |
+| CSS Modules                         | `css-loader` + `localIdentName`      | встроенный CSS Modules esbuild (локальные имена классов)        |
+| Минификация CSS                     | `postcss-loader` + `cssnano`         | встроенная минификация CSS esbuild                              |
+| SVG: `ReactComponent` и URL         | `@svgr/webpack` + `url-loader`       | плагин `svg-loader` (SVG → компонент + `data:image/svg+xml`)    |
+| `process.env` из `.env`             | `DefinePlugin` / `EnvironmentPlugin` | `define: { 'process.env': ... }` + `dotenv`                     |
+| `index.html` и содержимое `public/` | `html-webpack-plugin`                | плагин `html` (копия `public/` + подключение скриптов и стилей) |
+| Хэши в именах файлов                | `[contenthash]`                      | плагины `hashed-assets` / `hashed-styles`                       |
+| Структура вывода                    | `static/scripts`, `static/styles`    | `static/scripts`, `static/styles`                               |
+| SPA-роутинг в dev                   | `historyApiFallback`                 | свой статик-сервер с fallback на `index.html`                   |
+
+Скрипты:
+
+```bash
+npm run build:webpack   # production-сборка webpack → dist/
+npm run build:esbuild   # production-сборка esbuild → build-esbuild/
+npm run start:esbuild   # dev-режим: watch-пересборка + сервер http://localhost:3000
+```
+
+Сборка esbuild запускается и создаёт production-бандл без ошибок.
+
+### Сравнение с Webpack
+
+Замеры на одном окружении (macOS, Node.js 22.5, по 3 холодных прогона каждой production-сборки,
+время — весь запуск npm-скрипта вместе с загрузкой конфига).
+
+| Сборщик       | Build time (3 прогона)   | JS       | JS (gzip) | CSS   | CSS (gzip) | Всего на диске |
+| ------------- | ------------------------ | -------- | --------- | ----- | ---------- | -------------- |
+| Webpack       | 27.9 с / 25.9 с / 25.2 с | 630 КБ   | 207 КБ    | 47 КБ | 9 КБ       | 677 КБ         |
+| esbuild + SWC | 4.2 с / 4.3 с / 4.2 с    | 1 121 КБ | 345 КБ    | 36 КБ | 7 КБ       | 1 136 КБ       |
+
+Вывод: esbuild собирает тот же проект примерно в 6 раз быстрее (≈4.2 с против ≈26 с), но
+минифицированный JS получается больше — 1.1 МБ против 630 КБ (gzip: 345 КБ против 207 КБ):
+esbuild не делает такой агрессивный tree-shaking и не вырезает license-комментарии, как webpack,
+CSS при этом немного меньше. Для быстрой локальной работы выгоднее esbuild, для продакшена с
+жёстким контролем размера — webpack.
+
+Чек-лист пункта (2 балла):
+
+- [x] альтернативная сборка запускается — `npm run build:esbuild` (1 балл)
+- [x] production build создаётся без ошибок (`build-esbuild/index.html`, `static/scripts`, `static/styles`)
+- [x] замерено время сборки webpack и esbuild (3 прогона)
+- [x] сравнён размер итоговых файлов (JS/CSS, с gzip)
+- [x] результаты с кратким выводом записаны в README (1 балл)
+
+## Запуск
+
+```bash
+npm install
+npm start               # dev-сервер webpack
+npm run build           # production-сборка webpack → dist/
+npm run build:esbuild   # альтернативная production-сборка esbuild → build-esbuild/
+npm run start:esbuild   # dev-режим esbuild
+```
