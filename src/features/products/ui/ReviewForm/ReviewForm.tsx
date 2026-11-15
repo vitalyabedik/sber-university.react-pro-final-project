@@ -1,34 +1,40 @@
-import { useState } from 'react';
 import classNames from 'classnames';
 import s from './ReviewForm.module.css';
 import { Rating } from '../../../../shared/ui/Rating';
 import { Input } from '../../../../shared/ui/Input';
 import { Button } from '../../../../shared/ui/Button';
+import { useReviewForm } from '../../model/useReviewForm';
 
-export const ReviewForm = () => {
-	const [reviewText, setReviewText] = useState('');
-	const [rating, setRating] = useState(0);
+type ReviewFormProps = {
+	productId: string;
+};
 
-	const handleClick = () => {
-		console.log('Отправка: ', { reviewText, rating });
-	};
+export const ReviewForm = ({ productId }: ReviewFormProps) => {
+	const { state, submitAction, isPending, text, setText, rating, setRating } =
+		useReviewForm(productId);
 
 	return (
-		<form className={s['form']}>
+		<form action={submitAction} className={s['form']}>
 			<Rating isEdit rating={rating} onChange={setRating} />
+			<input type='hidden' name='rating' value={rating} readOnly />
 			<Input
 				multiline
 				name='text'
 				id='text'
 				placeholder='Напишите текст отзыва'
-				value={reviewText}
-				onChange={setReviewText}
+				value={text}
+				onChange={setText}
 			/>
+			{state.error && (
+				<p role='alert' className={s['form__error']}>
+					{state.error}
+				</p>
+			)}
 			<Button
 				type='submit'
-				className={classNames(s['form__btn'])}
-				onClick={handleClick}>
-				Отправить отзыв
+				disabled={isPending}
+				className={classNames(s['form__btn'])}>
+				{isPending ? 'Отправляем…' : 'Отправить отзыв'}
 			</Button>
 		</form>
 	);

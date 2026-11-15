@@ -11,6 +11,9 @@ interface ProductsResponse {
 	length: number;
 }
 
+export type LeaveReviewRequest = Pick<Product, 'id'> &
+	Pick<Review, 'text' | 'rating'>;
+
 interface SetLikeResponse {
 	like: {
 		id: string;
@@ -101,6 +104,18 @@ export const productsApi = createApi({
 				{ type: 'Products', id: productFromBE?.product.productId },
 			],
 		}),
+		leaveReview: builder.mutation<Review, LeaveReviewRequest>({
+			query: ({ id, text, rating }) => ({
+				url: `/reviews/leave/${id}`,
+				method: 'POST',
+				body: { text, rating },
+				headers: { 'content-type': 'application/json' },
+			}),
+			invalidatesTags: (_review, _error, { id }) => [
+				{ type: 'Products', id: 'list' },
+				{ type: 'Products', id },
+			],
+		}),
 	}),
 });
 
@@ -109,4 +124,5 @@ export const {
 	useGetProductsQuery,
 	useSetLikeProductMutation,
 	useDeleteLikeProductMutation,
+	useLeaveReviewMutation,
 } = productsApi;

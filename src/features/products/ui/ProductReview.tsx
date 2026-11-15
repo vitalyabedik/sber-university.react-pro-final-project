@@ -10,7 +10,7 @@ export const ProductReview = ({ product }: ProductReviewProps) => {
 		<ReviewList
 			reviews={product.reviews}
 			title={`Отзыв о товаре ${product.name}`}>
-			<ReviewForm />
+			<ReviewForm productId={product.id} />
 		</ReviewList>
 	);
 };
